@@ -29,9 +29,6 @@ public class Main {
             // Resultado do teste único.
             UserTestSummary result = tester.testSingleUser(testCase /* Caso de teste */);
 
-            // Exibir resultados
-            System.out.println(result.getSummaryDetails());
-
       }
 
 }

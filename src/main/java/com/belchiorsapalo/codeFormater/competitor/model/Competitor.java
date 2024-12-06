@@ -65,4 +65,8 @@ public class Competitor implements UserDetails {
     public String getUsername() {
         return this.bi;
     }
+
+    public void updatePoints(int points){
+        this.score = this.score + points;
+    }
 }

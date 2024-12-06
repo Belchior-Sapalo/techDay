@@ -18,10 +18,7 @@ import tester.TestCase;
 import tester.UserTestSummary;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,9 +61,10 @@ public class CodeService {
         
         UserTestSummary result = tester.testSingleUser(testCase);
 
-        System.out.println(result.getSummaryDetails());
-
-        return new SubmitResponseDTO(currentProblem.getSequence(), true, result.getTotalPoints(), foundedCompetitor.getScore());
+        int totalPoints = result.getPassed() ? currentProblem.getPoints() : 0;
+        foundedCompetitor.updatePoints(totalPoints);
+        competitorRepository.save(foundedCompetitor);
+        return new SubmitResponseDTO(currentProblem.getSequence(), result.getPassed(), currentProblem.getPoints(), foundedCompetitor.getScore());
     }
 
     public TestResponseDTO testCode(CodeDTO code){

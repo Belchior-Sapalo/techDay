@@ -28,7 +28,7 @@ import lombok.Setter;
 public class Problem implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    public Problem(String title, String description, int sequence, double points, List<TestCase> testCases){
+    public Problem(String title, String description, int sequence, int points, List<TestCase> testCases){
         this.title = title;
         this.description = description;
         this.sequence = sequence;
@@ -50,7 +50,7 @@ public class Problem implements Serializable{
     private int sequence;
 
     @Column(nullable = false)
-    private double points;
+    private int points;
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     List<TestCase> testCases;

@@ -41,7 +41,7 @@ public class ConcurrentTester {
         Future<UserTestSummary> futureResults;
         futureResults = (executor.submit(() -> testUser("", List.of(userTestCase))));
 
-        UserTestSummary result = new UserTestSummary("");
+        UserTestSummary result = new UserTestSummary();
             try {
                 result = futureResults.get();
             } catch (ExecutionException e) {
@@ -54,7 +54,7 @@ public class ConcurrentTester {
     }
 
     private UserTestSummary testUser(String userId, List<TestCase> testCases) {
-        UserTestSummary summary = new UserTestSummary(userId);
+        UserTestSummary summary = new UserTestSummary();
         for (TestCase testCase : testCases) {
             List<String> inputs = testCase.getInputs();
             List<String> expectedOutputs = testCase.getExpectedOutputs();
@@ -81,9 +81,4 @@ public class ConcurrentTester {
         return summary;
     }
 
-    public List<UserTestSummary> generateRanking(Map<String, UserTestSummary> userSummaries) {
-        List<UserTestSummary> ranking = new ArrayList<>(userSummaries.values());
-        ranking.sort((a, b) -> Integer.compare(b.getTotalPoints(), a.getTotalPoints())); // Descending order
-        return ranking;
-    }
 }

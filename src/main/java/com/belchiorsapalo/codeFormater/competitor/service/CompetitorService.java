@@ -57,5 +57,4 @@ public class CompetitorService implements UserDetailsService {
         var foundedCompetitor = (Competitor) competitorRepository.findUserByBi(bi);
         return new GetCompetitorInfoDTO(null, foundedCompetitor.getName(), foundedCompetitor.getScore());
     }
-
 }
