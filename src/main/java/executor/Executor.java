@@ -252,7 +252,7 @@ public class Executor
 
         if (timeout)
         {
-            p.destroy();
+            p.destroyForcibly();
             // wait the process to be destroyed
             while (p.isAlive());
         }

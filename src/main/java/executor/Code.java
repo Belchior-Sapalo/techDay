@@ -1,6 +1,8 @@
 package executor;
 
+import java.io.IOException;
 import java.io.File;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -133,6 +135,26 @@ public class Code
         commands.addAll(this.getProgramArguments());
 
         return commands;
+    }
+
+    public void clean()
+    {
+        clean(false);
+    }
+
+    public void clean(boolean skipInput)
+    {
+    // delete temporary files
+        try
+        {
+            if (!skipInput)
+                Files.deleteIfExists(this.getInputFile().toPath());
+            Files.deleteIfExists(this.getOutputFile().toPath());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override

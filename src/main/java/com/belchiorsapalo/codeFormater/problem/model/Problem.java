@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import com.belchiorsapalo.codeFormater.competitorResInfo.model.CompetitorResInfo;
 import com.belchiorsapalo.codeFormater.testCase.model.TestCase;
 
 import jakarta.persistence.CascadeType;
@@ -54,4 +55,7 @@ public class Problem implements Serializable{
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     List<TestCase> testCases;
+
+    @OneToMany(mappedBy = "problem")
+    List<CompetitorResInfo> cInfos;
 }

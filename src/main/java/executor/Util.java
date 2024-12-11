@@ -45,23 +45,6 @@ public class Util
     public static Code codeFromString(String code, String outputPath, CodeType type)
             throws IOException
     {
-        // long time = System.currentTimeMillis();
-        // String filename = String.format("Code_%d.%s", time, type.getExtension());
-        // // create the target directory, if needed
-        // Files.createDirectories(Path.of(outputPath));
-
-        // File file = new File(outputPath, filename);
-        // BufferedWriter writer = Files.newBufferedWriter(file.toPath());
-
-        // if (type == CodeType.JAVA)
-        // {
-        //     String className = "Code_" + time;
-        //     writer.write(JavaCode.addClassTo(code, className));
-        // }
-        // else
-        // {
-        //     writer.write(code);
-        // }
         String filename;
         long time = System.currentTimeMillis();
 
@@ -127,26 +110,17 @@ public class Util
         Status status = Executor.compile(code);
         if (status.exitValue != 0)
         {
-            cleanUp(code);
+            code.clean();
             return status;
         }
 
         status = Executor.execute(code, inputData);
-        cleanUp(code);
+        code.clean();
         return status;
     }
 
     public static void cleanUp(Code code)
     {
-        // delete temporary files
-        try
-        {
-            Files.deleteIfExists(code.getInputFile().toPath());
-            Files.deleteIfExists(code.getOutputFile().toPath());
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 }

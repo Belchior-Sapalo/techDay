@@ -21,6 +21,8 @@ public class GeneralExceptionHandler {
         return new ApiError(e.getMessage());
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleResourceNotFoundException(ResourceNotFoundException e){
         return new ApiError(e.getMessage());
     }

@@ -5,11 +5,12 @@ import com.belchiorsapalo.codeFormater.code.DTO.TestResponseDTO;
 import com.belchiorsapalo.codeFormater.code.services.CodeService;
 import com.belchiorsapalo.codeFormater.exceptions.InvalidCodeException;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("/code")
 public class CodeController {
@@ -27,7 +28,7 @@ public class CodeController {
     }
 
     @PostMapping("/test")
-    public ResponseEntity<TestResponseDTO> testCode(@RequestBody CodeDTO codeDTO){
+    public ResponseEntity<TestResponseDTO> testCode(@RequestBody CodeDTO codeDTO) throws IOException{
         return ResponseEntity.ok().body(codeService.testCode(codeDTO));
     }
 }
