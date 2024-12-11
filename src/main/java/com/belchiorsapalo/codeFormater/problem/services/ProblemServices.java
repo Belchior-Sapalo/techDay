@@ -30,14 +30,14 @@ public class ProblemServices {
         Optional<Problem> verifyProblem = problemRepository.findProblemByTitleAndDescription(pDto.title(), pDto.description());
         if (verifyProblem.isPresent())
             throw new ResourceAlreadyExistsException("Essa pergunta já existe");
-        Problem newProblem = new Problem(pDto.title(), pDto.description(), pDto.sequence(), pDto.points(), pDto.testCases());
+        Problem newProblem = new Problem(pDto.title(), pDto.description(), pDto.sequence(), pDto.points(), pDto.durationTime(), pDto.testCases());
         pDto.testCases().stream().forEach(testeCase -> testeCase.setProblem(newProblem));
         return problemRepository.save(newProblem);
     }
 
     public Problem getFirstProblem(){
         return problemRepository
-            .findFirstBySequenceGreaterThanOrderBySequence(-1)
+            .findFirstBySequenceGreaterThanOrderBySequence( -1)
             .orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
     }
 
@@ -49,7 +49,7 @@ public class ProblemServices {
 
     public Problem getNextProblem(int sequence){
         return problemRepository
-            .findFirstBySequenceGreaterThanOrderBySequence(sequence)
+            .findFirstBySequenceGreaterThanOrderBySequence( sequence)
             .orElse(null);
     }
 
@@ -58,12 +58,9 @@ public class ProblemServices {
         problemRepository.deleteById(id);
     }
 
-    public Problem update(UUID id, ProblemRegisterDTO pDto){
+    public Problem update(UUID id){
         var verifyProblem = problemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
-        if (!pDto.title().equals(verifyProblem.getTitle()))
-            verifyProblem.setTitle(pDto.title());
-        if (!pDto.description().equals(verifyProblem.getDescription()))
-            verifyProblem.setDescription(pDto.description());
+        verifyProblem.setVisible(true);
         return problemRepository.save(verifyProblem);
     }
 }

@@ -29,12 +29,14 @@ import lombok.Setter;
 public class Problem implements Serializable{
     private static final long serialVersionUID = 1L;
 
-    public Problem(String title, String description, int sequence, int points, List<TestCase> testCases){
+    public Problem(String title, String description, int sequence, int points, int durationTime, List<TestCase> testCases){
         this.title = title;
         this.description = description;
         this.sequence = sequence;
         this.testCases = testCases;
         this.points = points;
+        this.durationTime = durationTime;
+        this.isVisible = false;
     }
     
     @Id
@@ -52,6 +54,12 @@ public class Problem implements Serializable{
 
     @Column(nullable = false)
     private int points;
+
+    @Column(nullable = false)
+    private boolean isVisible;
+
+    @Column(nullable = false)
+    private int durationTime;
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     List<TestCase> testCases;

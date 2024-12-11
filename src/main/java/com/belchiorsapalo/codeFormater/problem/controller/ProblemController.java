@@ -19,8 +19,10 @@ import com.belchiorsapalo.codeFormater.problem.DTO.ProblemResponseDTO;
 import com.belchiorsapalo.codeFormater.problem.model.Problem;
 import com.belchiorsapalo.codeFormater.problem.services.ProblemServices;
 
+import jakarta.validation.Valid;
+
 @RestController
-@RequestMapping("/problem")
+@RequestMapping("/problems")
 public class ProblemController {
     private final ProblemServices problemServices;
 
@@ -63,7 +65,7 @@ public class ProblemController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Problem> register(@RequestBody ProblemRegisterDTO pDto){
+    public ResponseEntity<Problem> register(@Valid @RequestBody ProblemRegisterDTO pDto){
         return ResponseEntity.ok().body(problemServices.register(pDto));
     }
 
@@ -74,7 +76,7 @@ public class ProblemController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Problem> update(@PathVariable UUID id, @RequestBody ProblemRegisterDTO pDto){
-        return ResponseEntity.ok().body(problemServices.update(id, pDto));
+    public ResponseEntity<Problem> update(@PathVariable UUID id){
+        return ResponseEntity.ok().body(problemServices.update(id));
     }
 }

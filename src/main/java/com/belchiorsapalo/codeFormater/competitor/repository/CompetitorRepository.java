@@ -9,4 +9,5 @@ import com.belchiorsapalo.codeFormater.competitor.model.Competitor;
 
 public interface CompetitorRepository extends JpaRepository<Competitor, UUID>{
     UserDetails findUserByBi(String bi); 
+    boolean existsByRole(String role);
 }

@@ -30,10 +30,11 @@ import lombok.Setter;
 public class Competitor implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    public Competitor(CompetitorRegisterDTO competitorRegisterDTO, String encryptedPassword){
+    public Competitor(CompetitorRegisterDTO competitorRegisterDTO, String encryptedPassword, String role){
         this.bi = competitorRegisterDTO.bi();
         this.name = competitorRegisterDTO.name();
         this.password = encryptedPassword;
+        this.role = role;
     }
 
     @Id
@@ -49,11 +50,14 @@ public class Competitor implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String role;
+
     private int score;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return this.role == "USER" ?  List.of(new SimpleGrantedAuthority("ROLE_USER")) : List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Override

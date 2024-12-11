@@ -40,7 +40,8 @@ public class CompetitorService implements UserDetailsService {
                 competitorLoginDTO.bi(), competitorLoginDTO.password());
         var auth = authenticationManager.authenticate(usernamePasswordToken);
         String token = tokenService.generateToken((Competitor) auth.getPrincipal());
-        return new CompetitorLoginResDTO(token);
+        Competitor competitor = (Competitor) competitorRepository.findUserByBi(competitorLoginDTO.bi());
+        return new CompetitorLoginResDTO(token, competitor.getRole());
     }
 
     public Competitor register(CompetitorRegisterDTO competitorRegisterDTO) {
@@ -48,7 +49,11 @@ public class CompetitorService implements UserDetailsService {
         if (veryCompetitor != null)
             throw new ResourceAlreadyExistsException("O número de BI já existe");
         String encryptedPassword = new BCryptPasswordEncoder().encode(competitorRegisterDTO.password());
-        Competitor newCompetitor = new Competitor(competitorRegisterDTO, encryptedPassword);
+
+        if (competitorRegisterDTO.isAdmin() && competitorRepository.existsByRole("ADMIN"))
+            throw new ResourceAlreadyExistsException("Já existe um administrador registrado!");
+        
+        Competitor newCompetitor = new Competitor(competitorRegisterDTO, encryptedPassword, competitorRegisterDTO.isAdmin() ? "ADMIN": "USER");
         return competitorRepository.save(newCompetitor);
     }
 
