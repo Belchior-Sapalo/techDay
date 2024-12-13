@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.belchiorsapalo.codeFormater.competitorResInfo.model.CompetitorResInfo;
 import com.belchiorsapalo.codeFormater.testCase.model.TestCase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
