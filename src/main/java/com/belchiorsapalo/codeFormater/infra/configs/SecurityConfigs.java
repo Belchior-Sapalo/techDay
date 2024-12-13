@@ -38,10 +38,12 @@ public class SecurityConfigs {
                                 .requestMatchers(HttpMethod.POST, "/problems/register").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/problems").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/problems/first").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/problems/next/{sequence}").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/problems/current/{sequence}").authenticated()
-                                .requestMatchers(HttpMethod.DELETE, "/problems/delete/{id}").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/problems/update/{id}").hasRole("ADMIN"))
+                                .requestMatchers(HttpMethod.GET, "/problems/next").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/problems/verify/{sequence}").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/problems/delete/{id}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/problems/update/{id}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/problems/finish").hasRole("ADMIN")
+                                .requestMatchers("/ws/").permitAll())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

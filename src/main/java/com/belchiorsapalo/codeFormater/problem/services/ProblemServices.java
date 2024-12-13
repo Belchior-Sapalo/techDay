@@ -1,10 +1,12 @@
 package com.belchiorsapalo.codeFormater.problem.services;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.belchiorsapalo.codeFormater.exceptions.ResourceAlreadyExistsException;
@@ -23,33 +25,39 @@ public class ProblemServices {
     }
 
     public List<Problem> getAll(){
-        return problemRepository.findAll();
+        return problemRepository.findAll().stream()
+            .sorted((p1, p2) -> Integer.compare(p1.getSequence(), p2.getSequence())) 
+            .toList()   
+        ;
     }
 
     public Problem register(ProblemRegisterDTO pDto){
-        Optional<Problem> verifyProblem = problemRepository.findProblemByTitleAndDescription(pDto.title(), pDto.description());
-        if (verifyProblem.isPresent())
+        Optional<Problem> verifyProblemByTitle = problemRepository.findProblemByTitleAndDescription(pDto.title(), pDto.description());
+        if (verifyProblemByTitle.isPresent())
             throw new ResourceAlreadyExistsException("Essa pergunta já existe");
+        Optional<Problem> verifyProblemBySequence = problemRepository.findProblemBySequence(pDto.sequence());
+        if (verifyProblemBySequence.isPresent())
+            throw new ResourceAlreadyExistsException("Já existe uma pergunta para a sequência fornecida");
         Problem newProblem = new Problem(pDto.title(), pDto.description(), pDto.sequence(), pDto.points(), pDto.durationTime(), pDto.testCases());
         pDto.testCases().stream().forEach(testeCase -> testeCase.setProblem(newProblem));
         return problemRepository.save(newProblem);
     }
 
-    public Problem getFirstProblem(){
-        return problemRepository
-            .findFirstBySequenceGreaterThanOrderBySequence( -1)
-            .orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
-    }
+    // public Problem getFirstProblem(){
+    //     return problemRepository
+    //         .findFirstBySequenceGreaterThanOrderBySequence( -1)
+    //         .orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
+    // }
 
-    public Problem getCurrent(int sequence){
+    public Problem verifyProblems(int sequence){
         return problemRepository
-            .findProblemBySequence(sequence)
+            .findFirstBySequenceGreaterThanAndIsVisibleOrderBySequence(sequence, true)
             .orElse(null);
     }
 
-    public Problem getNextProblem(int sequence){
+    public Problem getNextProblem(){
         return problemRepository
-            .findFirstBySequenceGreaterThanOrderBySequence( sequence)
+            .findProblemByIsVisible(true)
             .orElse(null);
     }
 
@@ -60,7 +68,24 @@ public class ProblemServices {
 
     public Problem update(UUID id){
         var verifyProblem = problemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
-        verifyProblem.setVisible(true);
+        List<Problem> problemList = problemRepository.findAll();
+
+        problemList.forEach(problem -> {
+            if (!problem.getId().toString().equals(id.toString())){
+                problem.setVisible(false);
+                problemRepository.save(problem);
+            }else{
+                verifyProblem.setVisible(true);
+            }
+        });
         return problemRepository.save(verifyProblem);
+    }
+
+    public void finish(){
+        List<Problem> problemList = problemRepository.findAll();
+        problemList.forEach(problem -> {
+            problem.setVisible(false);
+            problemRepository.save(problem);
+        });
     }
 }

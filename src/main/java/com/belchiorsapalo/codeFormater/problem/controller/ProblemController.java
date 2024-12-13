@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.belchiorsapalo.codeFormater.problem.DTO.ProblemRegisterDTO;
-import com.belchiorsapalo.codeFormater.problem.DTO.ProblemResponseDTO;
 import com.belchiorsapalo.codeFormater.problem.model.Problem;
 import com.belchiorsapalo.codeFormater.problem.services.ProblemServices;
 
@@ -36,32 +36,32 @@ public class ProblemController {
         return ResponseEntity.ok().body(problemServices.getAll());
     }
 
-    @GetMapping("/first")
-    public ResponseEntity<Problem> getFirst(){
-        Problem problem = problemServices.getFirstProblem();
+    // @GetMapping("/first")
+    // public ResponseEntity<Problem> getFirst(){
+    //     Problem problem = problemServices.getFirstProblem();
 
-        if (problem == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(problem);
-    }
+    //     if (problem == null){
+    //         return ResponseEntity.notFound().build();
+    //     }
+    //     return ResponseEntity.ok().body(problem);
+    // }
 
-    @GetMapping("/current/{sequence}")
+    @GetMapping("/verify/{sequence}")
     public ResponseEntity<Problem> getCurrent(@PathVariable int sequence){
-        Problem problem = problemServices.getCurrent(sequence);
+        Problem problem = problemServices.verifyProblems(sequence);
         if (problem == null){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(problem);
     }
 
-    @GetMapping("/next/{sequence}")
-    public ResponseEntity<ProblemResponseDTO> getNext(@PathVariable int sequence){
-        Problem problem = problemServices.getNextProblem(sequence);
+    @GetMapping("/next")
+    public ResponseEntity<Problem> getNext(){
+        Problem problem = problemServices.getNextProblem();
         if (problem == null){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(new ProblemResponseDTO(problem.getId(), problem.getTitle(), problem.getDescription(), problem.getSequence()));
+        return ResponseEntity.ok().body(problem);
     }
 
     @PostMapping("/register")
@@ -78,5 +78,11 @@ public class ProblemController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Problem> update(@PathVariable UUID id){
         return ResponseEntity.ok().body(problemServices.update(id));
+    }
+
+    @PutMapping("/finish")
+    public ResponseEntity<Object> finish(){
+        problemServices.finish();
+        return ResponseEntity.ok().build();
     }
 }

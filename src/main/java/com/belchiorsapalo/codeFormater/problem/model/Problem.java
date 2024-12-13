@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import com.belchiorsapalo.codeFormater.competitorResInfo.model.CompetitorResInfo;
 import com.belchiorsapalo.codeFormater.testCase.model.TestCase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -62,8 +64,10 @@ public class Problem implements Serializable{
     private int durationTime;
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<TestCase> testCases;
 
     @OneToMany(mappedBy = "problem")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<CompetitorResInfo> cInfos;
 }

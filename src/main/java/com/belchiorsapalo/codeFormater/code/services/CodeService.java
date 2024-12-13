@@ -74,13 +74,13 @@ public class CodeService {
 
         UserTestSummary result = tester.testSingleUser(testCase);
 
-        int bonusPoints = 0;
-        if (result.getPassed()) {
-            boolean verifyResInfo = cResInfoRepository.existsByCompetitorBiAndProblemId(bi, currentProblem.getId());
+        boolean verifyResInfo = cResInfoRepository.existsByCompetitorBiAndProblemId(bi, currentProblem.getId());
 
             if (verifyResInfo)
                 throw new ResourceAlreadyExistsException("Já mandou a sua resolução para esse problema!");
-
+        int bonusPoints = 0;
+        if (result.getPassed()) {
+            
             CompetitorResInfo cResInfo = new CompetitorResInfo(System.currentTimeMillis(), bi);
 
             currentProblem.getCInfos().add(cResInfo);
