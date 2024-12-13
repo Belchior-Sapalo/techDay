@@ -36,16 +36,6 @@ public class ProblemController {
         return ResponseEntity.ok().body(problemServices.getAll());
     }
 
-    // @GetMapping("/first")
-    // public ResponseEntity<Problem> getFirst(){
-    //     Problem problem = problemServices.getFirstProblem();
-
-    //     if (problem == null){
-    //         return ResponseEntity.notFound().build();
-    //     }
-    //     return ResponseEntity.ok().body(problem);
-    // }
-
     @GetMapping("/verify/{sequence}")
     public ResponseEntity<Problem> getCurrent(@PathVariable int sequence){
         Problem problem = problemServices.verifyProblems(sequence);
@@ -84,5 +74,10 @@ public class ProblemController {
     public ResponseEntity<Object> finish(){
         problemServices.finish();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/finished")
+    public ResponseEntity<Object> finished(){
+        return ResponseEntity.ok().body(problemServices.finished());
     }
 }

@@ -1,5 +1,8 @@
 package com.belchiorsapalo.codeFormater.competitor.service;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +38,8 @@ public class CompetitorService implements UserDetailsService {
         return competitorRepository.findUserByBi(bi);
     }
 
-    public CompetitorLoginResDTO login(CompetitorLoginDTO competitorLoginDTO, AuthenticationManager authenticationManager) {
+    public CompetitorLoginResDTO login(CompetitorLoginDTO competitorLoginDTO,
+            AuthenticationManager authenticationManager) {
         UsernamePasswordAuthenticationToken usernamePasswordToken = new UsernamePasswordAuthenticationToken(
                 competitorLoginDTO.bi(), competitorLoginDTO.password());
         var auth = authenticationManager.authenticate(usernamePasswordToken);
@@ -52,14 +56,23 @@ public class CompetitorService implements UserDetailsService {
 
         if (competitorRegisterDTO.isAdmin() && competitorRepository.existsByRole("ADMIN"))
             throw new ResourceAlreadyExistsException("Já existe um administrador registrado!");
-        
-        Competitor newCompetitor = new Competitor(competitorRegisterDTO, encryptedPassword, competitorRegisterDTO.isAdmin() ? "ADMIN": "USER");
+
+        Competitor newCompetitor = new Competitor(competitorRegisterDTO, encryptedPassword,
+                competitorRegisterDTO.isAdmin() ? "ADMIN" : "USER");
         return competitorRepository.save(newCompetitor);
     }
 
-    public GetCompetitorInfoDTO getCompetitorName(GetCompetitorInfoDTO tokenDTO){
+    public GetCompetitorInfoDTO getCompetitorInfo(GetCompetitorInfoDTO tokenDTO) {
         String bi = tokenService.validateToken(tokenDTO.token());
         var foundedCompetitor = (Competitor) competitorRepository.findUserByBi(bi);
         return new GetCompetitorInfoDTO(null, foundedCompetitor.getName(), foundedCompetitor.getScore());
+    }
+
+    public List<Competitor> getChalangeResults() {
+        return competitorRepository.findAll().stream()
+                .filter(c -> c.getRole().equals("USER"))
+                .sorted(Comparator.comparing(Competitor::getScore).reversed()
+                        .thenComparing(Competitor::getName))
+                .toList();
     }
 }

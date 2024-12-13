@@ -32,7 +32,8 @@ public class SecurityConfigs {
                         authorize -> authorize
                                 .requestMatchers(HttpMethod.POST, "/competitor/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/competitor/auth/register").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/competitor/getName").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/competitor/info").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/competitor/results").authenticated()
                                 .requestMatchers(HttpMethod.POST, "/code/process").authenticated()
                                 .requestMatchers(HttpMethod.POST, "/code/test").authenticated()
                                 .requestMatchers(HttpMethod.POST, "/problems/register").hasRole("ADMIN")
@@ -43,7 +44,7 @@ public class SecurityConfigs {
                                 .requestMatchers(HttpMethod.DELETE, "/problems/delete/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/problems/update/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/problems/finish").hasRole("ADMIN")
-                                .requestMatchers("/ws/").permitAll())
+                                .requestMatchers(HttpMethod.GET, "/problems/finished").authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

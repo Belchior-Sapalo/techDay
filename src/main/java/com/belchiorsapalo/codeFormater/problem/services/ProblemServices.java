@@ -88,4 +88,13 @@ public class ProblemServices {
             problemRepository.save(problem);
         });
     }
+
+    public boolean finished(){
+        List<Problem> problemList = problemRepository.findAll();
+        for (int i = 0; i < problemList.size(); i++) {
+            if (problemList.get(i).isVisible())
+                return false;
+        }
+        return true;
+    }
 }

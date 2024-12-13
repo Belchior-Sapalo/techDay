@@ -49,6 +49,7 @@ public class CodeService {
         this.cResInfoRepository = cResInfoRepository;
     }
 
+    @Transactional
     public SubmitResponseDTO processCode(CodeDTO code) throws InvalidCodeException, InterruptedException {
         ConcurrentTester tester = new ConcurrentTester();
 

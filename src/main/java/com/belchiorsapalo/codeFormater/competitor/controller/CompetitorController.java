@@ -1,8 +1,11 @@
 package com.belchiorsapalo.codeFormater.competitor.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +41,13 @@ public class CompetitorController {
         return ResponseEntity.ok().body(competitorService.register(competitorRegisterDTO));
     }
 
-    @PostMapping("/getName")
-    public ResponseEntity<GetCompetitorInfoDTO> getName(@RequestBody GetCompetitorInfoDTO tokenDTO){
-        return ResponseEntity.ok().body(competitorService.getCompetitorName(tokenDTO));
+    @PostMapping("/info")
+    public ResponseEntity<GetCompetitorInfoDTO> getCompetitor(@RequestBody GetCompetitorInfoDTO tokenDTO){
+        return ResponseEntity.ok().body(competitorService.getCompetitorInfo(tokenDTO));
+    }
+
+    @GetMapping("/results")
+    public ResponseEntity<List<Competitor>> getChalangeResults(){
+        return ResponseEntity.ok().body(competitorService.getChalangeResults());
     }
 }

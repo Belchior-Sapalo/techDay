@@ -9,6 +9,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.belchiorsapalo.codeFormater.competitor.DTO.CompetitorRegisterDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +30,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Competitor implements UserDetails {
-    private static final long serialVersionUID = 1L;
 
     public Competitor(CompetitorRegisterDTO competitorRegisterDTO, String encryptedPassword, String role){
         this.bi = competitorRegisterDTO.bi();
@@ -48,6 +49,7 @@ public class Competitor implements UserDetails {
     private String name;
 
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(nullable = false)
