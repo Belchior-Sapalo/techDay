@@ -34,7 +34,7 @@ public class CompetitorResInfo implements Serializable{
     @Column(nullable = false)
     private long submissionTime;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String competitorBi;
 
     @ManyToOne
