@@ -1,6 +1,7 @@
 package com.belchiorsapalo.codeFormater.problem.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +62,8 @@ public class Problem implements Serializable{
 
     @Column(nullable = false)
     private int durationTime;
+
+    private LocalDateTime startTime;
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

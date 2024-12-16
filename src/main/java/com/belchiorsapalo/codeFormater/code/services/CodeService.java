@@ -1,6 +1,7 @@
 package com.belchiorsapalo.codeFormater.code.services;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import com.belchiorsapalo.codeFormater.exceptions.InvalidCodeException;
 import com.belchiorsapalo.codeFormater.exceptions.InvalidLanguageException;
 import com.belchiorsapalo.codeFormater.exceptions.ResourceAlreadyExistsException;
 import com.belchiorsapalo.codeFormater.exceptions.ResourceNotFoundException;
+import com.belchiorsapalo.codeFormater.exceptions.TimeExpiredException;
 import com.belchiorsapalo.codeFormater.infra.TokenService;
 import com.belchiorsapalo.codeFormater.problem.model.Problem;
 import com.belchiorsapalo.codeFormater.problem.repository.ProblemRepository;
@@ -63,6 +65,12 @@ public class CodeService {
         var currentProblem = problemRepository.findById(code.currentProblemId())
                 .orElseThrow(() -> new ResourceNotFoundException("Falha ao submeter problema"));
 
+        // Verificar se o tempo para resolução expirou
+        LocalDateTime deadline = currentProblem.getStartTime().plusMinutes(currentProblem.getDurationTime());
+        if (LocalDateTime.now().isAfter(deadline)) {
+            throw new TimeExpiredException("O tempo para resolver este problema expirou!");
+        }
+
         List<String> inpuList = new ArrayList<>();
         List<String> outputList = new ArrayList<>();
 
@@ -77,11 +85,11 @@ public class CodeService {
 
         boolean verifyResInfo = cResInfoRepository.existsByCompetitorBiAndProblemId(bi, currentProblem.getId());
 
-            if (verifyResInfo)
-                throw new ResourceAlreadyExistsException("Já mandou a sua resolução para esse problema!");
+        if (verifyResInfo)
+            throw new ResourceAlreadyExistsException("Já mandou a sua resolução para esse problema!");
         int bonusPoints = 0;
         if (result.getPassed()) {
-            
+
             CompetitorResInfo cResInfo = new CompetitorResInfo(System.currentTimeMillis(), bi);
 
             currentProblem.getCInfos().add(cResInfo);
@@ -90,7 +98,8 @@ public class CodeService {
             bonusPoints = assignPoints(cResInfo, foundedCompetitor, currentProblem);
         }
 
-        return new SubmitResponseDTO(currentProblem.getSequence(), result.getPassed(), currentProblem.getPoints(), bonusPoints,
+        return new SubmitResponseDTO(currentProblem.getSequence(), result.getPassed(), currentProblem.getPoints(),
+                bonusPoints,
                 foundedCompetitor.getScore());
     }
 
@@ -98,14 +107,14 @@ public class CodeService {
     public int assignPoints(CompetitorResInfo cResInfo, Competitor competitor, Problem currentProblem) {
         int basePoints = currentProblem.getPoints();
         Pageable topThree = PageRequest.of(0, 3);
-            List<CompetitorResInfo> firstThreeSolutions = cResInfoRepository
-                    .findFirstThreeCompetitorResInfo(currentProblem.getId(), topThree);
+        List<CompetitorResInfo> firstThreeSolutions = cResInfoRepository
+                .findFirstThreeCompetitorResInfo(currentProblem.getId(), topThree);
 
         // Verificar se a solução atual está entre as três primeiras
         if (firstThreeSolutions.size() < 3) {
-            int bonusPoints = 3 - (firstThreeSolutions.size()); // 5 para 1º, 4 para 2º, 3 para 3º
+            int bonusPoints = 3 - (firstThreeSolutions.size()); // 3 para 1º, 2 para 2º, 1 para 3º
             competitor.updatePoints(basePoints + bonusPoints);
-        }else{
+        } else {
             competitor.updatePoints(basePoints);
         }
         cResInfoRepository.save(cResInfo);

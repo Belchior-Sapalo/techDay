@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.belchiorsapalo.codeFormater.problem.DTO.ProblemRegisterDTO;
+import com.belchiorsapalo.codeFormater.problem.DTO.ProblemResponseDTO;
 import com.belchiorsapalo.codeFormater.problem.model.Problem;
 import com.belchiorsapalo.codeFormater.problem.services.ProblemServices;
 
@@ -26,57 +27,71 @@ public class ProblemController {
     private final ProblemServices problemServices;
 
     @Autowired
-    public ProblemController(ProblemServices problemServices){
+    public ProblemController(ProblemServices problemServices) {
         this.problemServices = problemServices;
     }
 
     @GetMapping
-    public ResponseEntity<List<Problem>> getAll(){
+    public ResponseEntity<List<Problem>> getAll() {
         return ResponseEntity.ok().body(problemServices.getAll());
     }
 
     @GetMapping("/verify/{sequence}")
-    public ResponseEntity<Problem> getCurrent(@PathVariable int sequence){
+    public ResponseEntity<Problem> getCurrent(@PathVariable int sequence) {
         Problem problem = problemServices.verifyProblems(sequence);
-        if (problem == null){
+        if (problem == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(problem);
     }
 
     @GetMapping("/next")
-    public ResponseEntity<Problem> getNext(){
+    public ResponseEntity<Problem> getNext() {
         Problem problem = problemServices.getNextProblem();
-        if (problem == null){
+        if (problem == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(problem);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Problem> getCurrent(@PathVariable UUID id) {
+        Problem problem = problemServices.getCurrentProblem(id);
+        if (problem == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().body(problem);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Problem> register(@Valid @RequestBody ProblemRegisterDTO pDto){
+    public ResponseEntity<Problem> register(@Valid @RequestBody ProblemRegisterDTO pDto) {
         return ResponseEntity.ok().body(problemServices.register(pDto));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> delete(@PathVariable UUID id){
+    public ResponseEntity<Object> delete(@PathVariable UUID id) {
         problemServices.delete(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Problem> update(@PathVariable UUID id){
+    public ResponseEntity<Problem> update(@PathVariable UUID id) {
         return ResponseEntity.ok().body(problemServices.update(id));
     }
 
+    @GetMapping("/{id}/time-left")
+    public ResponseEntity<Object> getTimeLeft(@PathVariable UUID id) {
+        return ResponseEntity.ok().body(problemServices.getTimeLeft(id));
+    }
+
     @PutMapping("/finish")
-    public ResponseEntity<Object> finish(){
+    public ResponseEntity<Object> finish() {
         problemServices.finish();
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/finished")
-    public ResponseEntity<Object> finished(){
+    public ResponseEntity<ProblemResponseDTO> finished() {
         return ResponseEntity.ok().body(problemServices.finished());
     }
 }

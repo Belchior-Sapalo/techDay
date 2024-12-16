@@ -1,5 +1,7 @@
 package com.belchiorsapalo.codeFormater.exceptions;
 
+import java.sql.Time;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +32,12 @@ public class GeneralExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ApiError handleRunTimeException(RuntimeException e){
+        return new ApiError(e.getMessage());
+    }
+
+    @ExceptionHandler(TimeExpiredException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiError handleTimeExpiredExeption(TimeExpiredException e){
         return new ApiError(e.getMessage());
     }
 
