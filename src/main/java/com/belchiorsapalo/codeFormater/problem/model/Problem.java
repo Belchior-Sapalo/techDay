@@ -68,7 +68,7 @@ public class Problem implements Serializable{
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     List<TestCase> testCases;
 
-    @OneToMany(mappedBy = "problem")
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<CompetitorResInfo> cInfos;
 }

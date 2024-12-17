@@ -1,12 +1,9 @@
 com\belchiorsapalo\codeFormater\exceptions\ResourceNotFoundException.class
 com\belchiorsapalo\codeFormater\competitor\repository\CompetitorRepository.class
-com\belchiorsapalo\codeFormater\code\DTO\TestResponseDTO.class
 tester\TestCase.class
-com\belchiorsapalo\codeFormater\code\DTO\CodeDTO.class
 tester\UserTestSummaryDetails.class
 executor\Util$CodeType.class
 com\belchiorsapalo\codeFormater\competitorResInfo\repository\CompetitorResInfoRepository.class
-com\belchiorsapalo\codeFormater\code\DTO\SubmitResponseDTO.class
 com\belchiorsapalo\codeFormater\competitor\model\Competitor.class
 executor\Status.class
 com\belchiorsapalo\codeFormater\exceptions\ResourceAlreadyExistsException.class
@@ -36,6 +33,7 @@ com\belchiorsapalo\codeFormater\infra\configs\WebConfig.class
 tester\UserTestSummary.class
 tester\ConcurrentTester.class
 executor\PHPCode.class
+com\belchiorsapalo\codeFormater\testCase\repository\TestCasesRepository.class
 com\belchiorsapalo\codeFormater\exceptions\ApiError.class
 executor\Executor.class
 com\belchiorsapalo\codeFormater\competitorResInfo\model\CompetitorResInfo.class
@@ -45,7 +43,6 @@ com\belchiorsapalo\codeFormater\infra\configs\SecurityConfigs.class
 com\belchiorsapalo\codeFormater\exceptions\GeneralExceptionHandler.class
 com\belchiorsapalo\codeFormater\code\controller\CodeController.class
 com\belchiorsapalo\codeFormater\problem\DTO\ProblemResponseDTO.class
-com\belchiorsapalo\codeFormater\CodeFormaterApplication.class
 com\belchiorsapalo\codeFormater\competitor\DTO\CompetitorLoginResDTO.class
 tester\TestResult.class
 executor\JavaCode.class

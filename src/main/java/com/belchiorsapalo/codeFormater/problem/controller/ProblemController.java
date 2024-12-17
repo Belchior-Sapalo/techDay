@@ -79,6 +79,12 @@ public class ProblemController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/delete/testCases/{id}")
+    public ResponseEntity<Object> deleteTestCases(@PathVariable UUID id) {
+        problemServices.deleteProblemTestCases(id);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<Problem> update(@PathVariable UUID id) {
         return ResponseEntity.ok().body(problemServices.update(id));

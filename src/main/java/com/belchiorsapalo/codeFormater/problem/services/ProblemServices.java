@@ -55,8 +55,8 @@ public class ProblemServices {
 
     public Problem updateProblem(ProblemRegisterDTO pDto, UUID id) {
         Problem problemToUpdate = problemRepository
-        .findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
         problemToUpdate.setTitle(pDto.title());
         problemToUpdate.setDescription(pDto.description());
         problemToUpdate.setSequence(pDto.sequence());
@@ -85,15 +85,22 @@ public class ProblemServices {
                 .orElse(null);
     }
 
-    @Transactional
     public void delete(UUID id) {
         problemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
-        utilDeleteProblmeTestCases(id);
         problemRepository.deleteById(id);
     }
 
-    private void utilDeleteProblmeTestCases(UUID id){
-        testCasesRepository.deleteAllByProblemId(id);
+    public void deleteProblemTestCases(UUID id) {
+        Problem problemToDelete = problemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
+
+        problemToDelete.getTestCases().forEach(testCase -> {
+            testCase.setProblem(null);
+            testCasesRepository.delete(testCase);
+        });
+
+        problemToDelete.getTestCases().clear();
+        problemRepository.save(problemToDelete);
     }
 
     @Transactional
