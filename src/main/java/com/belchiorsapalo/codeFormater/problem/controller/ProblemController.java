@@ -68,6 +68,11 @@ public class ProblemController {
         return ResponseEntity.ok().body(problemServices.register(pDto));
     }
 
+    @PutMapping("/updateProblem/{id}")
+    public ResponseEntity<Problem> updateProblem(@PathVariable UUID id, @RequestBody ProblemRegisterDTO pDto) {
+        return ResponseEntity.ok().body(problemServices.updateProblem(pDto, id));
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> delete(@PathVariable UUID id) {
         problemServices.delete(id);

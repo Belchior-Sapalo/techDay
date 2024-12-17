@@ -66,7 +66,6 @@ public class Problem implements Serializable{
     private LocalDateTime startTime;
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     List<TestCase> testCases;
 
     @OneToMany(mappedBy = "problem")

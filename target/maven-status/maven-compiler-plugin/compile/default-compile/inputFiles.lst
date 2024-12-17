@@ -20,6 +20,7 @@ C:\programacao\PROJECTOS\codeFormater\src\main\java\com\belchiorsapalo\codeForma
 C:\programacao\PROJECTOS\codeFormater\src\main\java\com\belchiorsapalo\codeFormater\exceptions\InvalidLanguageException.java
 C:\programacao\PROJECTOS\codeFormater\src\main\java\com\belchiorsapalo\codeFormater\exceptions\ResourceAlreadyExistsException.java
 C:\programacao\PROJECTOS\codeFormater\src\main\java\com\belchiorsapalo\codeFormater\exceptions\ResourceNotFoundException.java
+C:\programacao\PROJECTOS\codeFormater\src\main\java\com\belchiorsapalo\codeFormater\exceptions\TimeExpiredException.java
 C:\programacao\PROJECTOS\codeFormater\src\main\java\com\belchiorsapalo\codeFormater\infra\configs\SecurityConfigs.java
 C:\programacao\PROJECTOS\codeFormater\src\main\java\com\belchiorsapalo\codeFormater\infra\configs\SecurityFilter.java
 C:\programacao\PROJECTOS\codeFormater\src\main\java\com\belchiorsapalo\codeFormater\infra\configs\WebConfig.java

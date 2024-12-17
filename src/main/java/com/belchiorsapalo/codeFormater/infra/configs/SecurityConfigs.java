@@ -45,6 +45,7 @@ public class SecurityConfigs {
                                 .requestMatchers(HttpMethod.GET, "/problems/verify/{sequence}").authenticated()
                                 .requestMatchers(HttpMethod.DELETE, "/problems/delete/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/problems/update/{id}").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/problems/updateProblem/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/problems/finish").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/problems/finished").authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

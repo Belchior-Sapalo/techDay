@@ -40,6 +40,7 @@ com\belchiorsapalo\codeFormater\exceptions\ApiError.class
 executor\Executor.class
 com\belchiorsapalo\codeFormater\competitorResInfo\model\CompetitorResInfo.class
 com\belchiorsapalo\codeFormater\problem\DTO\ProblemRegisterDTO.class
+com\belchiorsapalo\codeFormater\exceptions\TimeExpiredException.class
 com\belchiorsapalo\codeFormater\infra\configs\SecurityConfigs.class
 com\belchiorsapalo\codeFormater\exceptions\GeneralExceptionHandler.class
 com\belchiorsapalo\codeFormater\code\controller\CodeController.class

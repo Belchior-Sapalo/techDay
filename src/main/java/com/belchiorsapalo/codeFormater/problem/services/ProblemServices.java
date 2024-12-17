@@ -18,16 +18,19 @@ import com.belchiorsapalo.codeFormater.problem.DTO.ProblemRegisterDTO;
 import com.belchiorsapalo.codeFormater.problem.DTO.ProblemResponseDTO;
 import com.belchiorsapalo.codeFormater.problem.model.Problem;
 import com.belchiorsapalo.codeFormater.problem.repository.ProblemRepository;
+import com.belchiorsapalo.codeFormater.testCase.repository.TestCasesRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class ProblemServices {
     private final ProblemRepository problemRepository;
+    private final TestCasesRepository testCasesRepository;
 
     @Autowired
-    public ProblemServices(ProblemRepository problemRepository) {
+    public ProblemServices(ProblemRepository problemRepository, TestCasesRepository testCasesRepository) {
         this.problemRepository = problemRepository;
+        this.testCasesRepository = testCasesRepository;
     }
 
     public List<Problem> getAll() {
@@ -50,6 +53,20 @@ public class ProblemServices {
         return problemRepository.save(newProblem);
     }
 
+    public Problem updateProblem(ProblemRegisterDTO pDto, UUID id) {
+        Problem problemToUpdate = problemRepository
+        .findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
+        problemToUpdate.setTitle(pDto.title());
+        problemToUpdate.setDescription(pDto.description());
+        problemToUpdate.setSequence(pDto.sequence());
+        problemToUpdate.setPoints(pDto.points());
+        problemToUpdate.setDurationTime(pDto.durationTime());
+        problemToUpdate.setTestCases(pDto.testCases());
+        pDto.testCases().stream().forEach(testeCase -> testeCase.setProblem(problemToUpdate));
+        return problemRepository.save(problemToUpdate);
+    }
+
     public Problem getCurrentProblem(UUID id) {
         return problemRepository
                 .findById(id)
@@ -68,9 +85,15 @@ public class ProblemServices {
                 .orElse(null);
     }
 
+    @Transactional
     public void delete(UUID id) {
         problemRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Problema não encontrado"));
+        utilDeleteProblmeTestCases(id);
         problemRepository.deleteById(id);
+    }
+
+    private void utilDeleteProblmeTestCases(UUID id){
+        testCasesRepository.deleteAllByProblemId(id);
     }
 
     @Transactional
